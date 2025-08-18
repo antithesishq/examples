@@ -5,7 +5,7 @@ Each example directory is standalone so the directory can be copied to another p
 
 ## Examples overview
 
-| Example name | Software being tested | Industry | Test type | Orchestration | 
-| --- | --- | --- | --- | --- |
-| etcd | etcd | Cloud Infrastructure | Correctness | Docker Compose |
-| etcd-k8s | etcd | Cloud infrastructure | Correctness | Kubernetes |
+| Example name | Description | 
+| --- | --- |
+| etcd | A 3-node etcd cluster orchestrated with Docker Compose |
+| etcd-k8s | A 3-node etcd cluster orchestrated with Kubernetes |
