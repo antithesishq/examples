@@ -3,9 +3,9 @@ This repository is a collection of example systems tested with Antithesis.
 
 Each example directory is standalone so the directory can be copied to another project.
 
-### Examples overview
-| Example name | Core software being tested | Industry | What type of test | Orchestration tech |
+## Examples overview
 
-| etcd | etcd | Cloud infrastructure | Correctness | docker-compose |
-
-| etcd-k8s | etcd | Cloud infrastructure | Correctness | kubernetes |
+| Example name | Software being tested | Industry | Test type | Orchestration | 
+| --- | --- | --- | --- | --- |
+| etcd | etcd | Cloud Infrastructure | Correctness | Docker Compose |
+| etcd-k8s | etcd | Cloud infrastructure | Correctness | Kubernetes |
