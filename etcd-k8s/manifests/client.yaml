@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etcd-client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: etcd-client
+  template:
+    metadata:
+      labels:
+        app: etcd-client
+    spec:
+      containers:
+      - name: etcd-client
+        image: us-central1-docker.pkg.dev/molten-verve-216720/antithesis-pdev-repository/etcd-client:k8s
+        command: ["sleep"]
+        args: ["infinity"]

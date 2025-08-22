@@ -1,4 +1,4 @@
-replicaCount: 3  # We'll be running 3 etcd nodes: etcd0, etcd1, etcd2
+replicaCount: 3  # We'll be running 3 etcd nodes: etcd-0, etcd-1, etcd-2
 
 image:
   repository: bitnami/etcd
