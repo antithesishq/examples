@@ -1,4 +1,4 @@
-# Etcd-test-composer
+# Etcd
 
 ## Purpose
 
