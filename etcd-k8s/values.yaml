@@ -1,0 +1,16 @@
+fullnameOverride: "etcd" # Ensures pods have predictable names like etcd-0, etcd-1, etcd-2
+replicaCount: 3
+image:
+  repository: bitnami/etcd
+  tag: 3.5
+preUpgradeJob:
+  enabled: false
+persistence:
+  size: 1Gi
+auth:
+  rbac:
+    create: false
+  client:
+    enableAuthentication: false
+  token:
+    enabled: false
