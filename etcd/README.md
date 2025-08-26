@@ -1,8 +1,8 @@
 # Etcd
 
-## Purpose
+## Overview
 
-This repo demonstrates the use of the [Antithesis platform](https://antithesis.com/product/what_is_antithesis/) to test [etcd](https://etcd.io/). Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/)
+This repo demonstrates the use of the [Antithesis platform](https://antithesis.com/product/what_is_antithesis/) to test [etcd](https://etcd.io/). Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_docker/)
 
 ## Setup
 
