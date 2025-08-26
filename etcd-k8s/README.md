@@ -46,3 +46,39 @@ Antithesis SDKs allow users to [express the properties their software should hav
 ### Randomness
 
 Randomness is key for autonomous testing, since we want the software to follow many unpredictable execution paths. [The Antithesis SDK](https://antithesis.com/docs/using_antithesis/sdk/#randomness) provides an easy interface to get structured random values while also providing valuable guidance to the Antithesis platform, which increases the efficiency of testing.
+
+## Testing Locally
+
+Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
+
+This process is [described in greater detail here](https://antithesis.com/docs/test_templates/testing_locally/).
+
+1. Pull the bitnami/etcd:3.5 image using the following command: 
+
+`docker pull bitnami/etcd:3.5`
+
+2. Build the client image. From within the `/client` directory, run the following command: 
+
+`docker build . -f Dockerfile.client -t etcd-client:k8s`
+
+3. Deploy your manifests. 
+
+`kapp deploy -a app-name -f manifests/ --yes`
+
+4. Check your rollout status
+
+`kubectl rollout status statefulset/etcd --timeout=3m`
+`kubectl get sts etcd`
+`kubectl get pods`
+
+You should see 3/3 pods become ready, named etcd-0, etcd-1, etcd-2.
+
+5. After the system is up, you can run the parallel driver 1 to many times via `kubectl exec`: 
+
+`kubectl exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
+
+`kubectl exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
+
+6. Confirm that the parallel driver command works
+
+You've now validated that your test is ready to run on the Antithesis platform! (Note that SDK assertions won't be evaluated locally.)
