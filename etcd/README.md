@@ -67,11 +67,11 @@ This process is [described in greater detail here](https://antithesis.com/docs/t
 
 2. Build the health-checker image. From within the `health-checker` directory, run the following command:
 
-`docker build . -f Dockerfile.health-checker -t etcd-health-checker:v1`
+`docker build . -f Dockerfile.health-checker -t etcd-tutorial-health-checker:tutorial`
 
 2. Build the client image. From within the `/client` directory, run the following command: 
 
-`docker build . -f Dockerfile.client -t etcd-client:v1`
+`docker build . -f Dockerfile.client -t etcd-tutorial-client:tutorial`
 
 3. Run `docker-compose up` from the config directory to start all containers defined in `docker-compose.yml`
 
