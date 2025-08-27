@@ -15,5 +15,6 @@ spec:
       containers:
       - name: etcd-client
         image: us-central1-docker.pkg.dev/molten-verve-216720/antithesis-pdev-repository/etcd-client:k8s
+        # The client containers must be kept running for Antithesis to keep testing
         command: ["sleep"]
         args: ["infinity"]
