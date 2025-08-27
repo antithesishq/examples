@@ -55,7 +55,7 @@ This process is [described in greater detail here](https://antithesis.com/docs/t
 
 1. Build the client image: 
 
-    `podman build -f client/Dockerfile.client -t etcd-client:k8s client/`
+    `docker build -f client/Dockerfile.client -t etcd-client:k8s client/`
 
 2. Deploy your manifests. 
 

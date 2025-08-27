@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   etcd0:
-    image: 'docker.io/bitnami/etcd:3.5'
+    image: 'docker.io/bitnamilegacy/etcd:3.5'
     container_name: etcd0
     hostname: etcd0
     environment: 
@@ -23,7 +23,7 @@ services:
       retries: 3
 
   etcd1:
-    image: 'docker.io/bitnami/etcd:3.5'
+    image: 'docker.io/bitnamilegacy/etcd:3.5'
     container_name: etcd1
     hostname: etcd1
     environment: 
@@ -43,7 +43,7 @@ services:
       retries: 3
 
   etcd2:
-    image: 'docker.io/bitnami/etcd:3.5'
+    image: 'docker.io/bitnamilegacy/etcd:3.5'
     container_name: etcd2
     hostname: etcd2
     environment: 
