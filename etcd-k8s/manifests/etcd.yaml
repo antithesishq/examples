@@ -185,7 +185,7 @@ spec:
       serviceAccountName: "etcd"
       containers:
         - name: etcd
-          image: docker.io/bitnami/etcd:3.5
+          image: docker.io/bitnamilegacy/etcd:3.5
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false

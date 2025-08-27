@@ -6,7 +6,7 @@ This repo demonstrates the use of the [Antithesis platform](https://antithesis.c
 
 ## Setup
 
-We use the public [etcd helm chart](https://artifacthub.io/packages/helm/bitnami/etcd) to run a 3-node etcd cluster (`etcd0`, `etcd1`, `etcd2`). Additionally, we run two `client` containers to exercise the cluster. 
+We use the [etcd helm chart](https://github.com/bitnami/charts) to run a 3-node etcd cluster (`etcd-0`, `etcd-1`, `etcd-2`). Additionally, we run two `client` containers to exercise the cluster. `manifests/etcd.yaml` is generated using the values documented [in the tutorial](https://antithesis.com/docs/tutorials/k8s-cluster-setup/#create-a-values.yaml-file)
 
 ## Test Composer 
 
@@ -51,33 +51,34 @@ Randomness is key for autonomous testing, since we want the software to follow m
 
 Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
 
-This process is [described in greater detail here](https://antithesis.com/docs/test_templates/testing_locally/).
+This process is [described in greater detail here](https://antithesis.com/docs/tutorials/k8s-cluster-setup/#start-the-cluster-locally) and [here](https://antithesis.com/docs/test_templates/testing_locally/)
 
-1. Pull the bitnami/etcd:3.5 image using the following command: 
+1. Build the client image: 
 
-`docker pull bitnami/etcd:3.5`
+    `podman build -f client/Dockerfile.client -t etcd-client:k8s client/`
 
-2. Build the client image. From within the `/client` directory, run the following command: 
+2. Deploy your manifests. 
 
-`docker build . -f Dockerfile.client -t etcd-client:k8s`
+    `kubectl apply -f manifests/` 
 
-3. Deploy your manifests. 
+    or if you're using `kapp`:
 
-`kapp deploy -a app-name -f manifests/ --yes`
+    `kapp deploy -a app-name -f manifests/ --yes`
 
-4. Check your rollout status
+3. Check your rollout status
+    ```
+    kubectl rollout status statefulset/etcd --timeout=3m
+    kubectl get sts etcd
+    kubectl get pods
+    ```
 
-`kubectl rollout status statefulset/etcd --timeout=3m`
-`kubectl get sts etcd`
-`kubectl get pods`
+    You should see 3/3 pods become ready, named `etcd-0`, `etcd-1`, `etcd-2`.
 
-You should see 3/3 pods become ready, named etcd-0, etcd-1, etcd-2.
+4. After the system is up, you can run the parallel driver 1 to many times via `kubectl exec`: 
 
-5. After the system is up, you can run the parallel driver 1 to many times via `kubectl exec`: 
+    `kubectl exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
 
-`kubectl exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
-
-`kubectl exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
+    `kubectl exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
 
 6. Confirm that the parallel driver command works
 
