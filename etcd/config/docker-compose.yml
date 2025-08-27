@@ -77,9 +77,9 @@ services:
   client1:
     image: 'etcd-tutorial-client:tutorial'
     container_name: client1
-    entrypoint: "sleep infinity"
+    entrypoint: "sleep infinity" # The client containers must be kept running for Antithesis to keep testing
 
   client2:
     image: 'etcd-tutorial-client:tutorial'
     container_name: client2
-    entrypoint: "sleep infinity"
+    entrypoint: "sleep infinity" # The client containers must be kept running for Antithesis to keep testing
