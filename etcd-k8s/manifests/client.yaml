@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: etcd-client
-        image: us-central1-docker.pkg.dev/molten-verve-216720/antithesis-pdev-repository/etcd-client:k8s
+        image: us-central1-docker.pkg.dev/molten-verve-216720/$TENANT-NAME-repository/etcd-client:k8s
         command: ["sleep"]
         args: ["infinity"]
