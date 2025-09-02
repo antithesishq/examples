@@ -1,7 +1,4 @@
-version: '3.8'
-
 services:
-
   etcd0:
     image: 'docker.io/bitnamilegacy/etcd:3.5'
     container_name: etcd0

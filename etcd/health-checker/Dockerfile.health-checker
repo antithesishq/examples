@@ -1,16 +1,7 @@
-FROM docker.io/ubuntu:latest 
+FROM python:3.12-slim
 
-# Install dependencies
-RUN apt-get update -y && apt-get install -y pip
+# Install dependencies and Antithesis Python SDK
+RUN pip install --no-cache-dir antithesis cffi 
 
-# Install python
-RUN apt-get install -y python3
-
-# Install python etcd client
-RUN apt install -y python3-etcd3
-
-# Install Antithesis Python SDK
-RUN pip install antithesis cffi --break-system-packages
-
-# Copying python entrypoint. It contains the lifecycle setup_complete message.
+# Copy the python entrypoint. It contains the lifecycle setup_complete message.
 COPY ./entrypoint.py /entrypoint.py

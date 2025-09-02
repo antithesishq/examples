@@ -17,7 +17,7 @@ def simulate_traffic(prefix):
         We return the key/value pairs from successful requests.
     """
     client = helper.connect_to_host()
-    num_requests = helper.generate_requests()
+    num_requests = helper.generate_num_requests()
     kvs = []
 
     for _ in range(num_requests):
