@@ -2,18 +2,21 @@
 
 This example demonstrates how to test a 3-node **etcd** cluster using Antithesis. It includes:
 
-- A reproducible cluster setup using Kubernetes.  
+- A reproducible cluster setup using Docker Compose.  
 - A basic client workload.  
 - Example assertions.
 
-Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_kubernetes/).
+Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_docker/).
+
+---
 
 ## Architecture Overview
 
 The system under test includes:
 
 - **3 etcd server nodes** (`etcd0`, `etcd1`, `etcd2`).  
-- **2 client containers** that perform read/write operations.
+- **2 client containers** that perform read/write operations.  
+- **A health-checker** that prompts Antithesis when the system is ready for testing.
 
 [Faults](https://antithesis.com/docs/environment/fault_injection/) such as network partitions, restarts, pauses, and more will be introduced automatically by Antithesis.
 
@@ -23,7 +26,7 @@ The system under test includes:
 
 You will need:
 
-- Kubernetes.  
+- Docker and Docker Compose.  
 - An Antithesis account and authentication credentials.  
 - Access to Antithesis’s container registry.
 
@@ -77,11 +80,11 @@ always(values_stay_consistent, "Database key values stay consistent", {"mismatch
 
 Randomness is key for autonomous testing, since we want the software to follow many unpredictable execution paths. [The Antithesis SDK](https://antithesis.com/docs/using_antithesis/sdk/#randomness) provides an easy interface to get structured random values while also providing valuable guidance to the Antithesis platform, which increases the efficiency of testing.
 
-## Testing Locally
+## Testing Locally (Optional)
 
 Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
 
-This process is [described in greater detail here](https://antithesis.com/docs/tutorials/k8s-cluster-setup/#start-the-cluster-locally) and [here](https://antithesis.com/docs/test_templates/testing_locally/)
+This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
 
 1. Pull the etcd image:
 
@@ -89,35 +92,37 @@ This process is [described in greater detail here](https://antithesis.com/docs/t
 docker pull bitnamilegacy/etcd:3.5
 ```
 
-2. Build the client image: 
+2. Build container images (health-checker, client):
 
-    `docker build -f client/Dockerfile.client -t etcd-client:k8s client/`
+```shell
+docker build . -f Dockerfile.health-checker -t etcd-health-checker:v1
+docker build . -f Dockerfile.client -t etcd-client:v1
+```
 
-3. Deploy your manifests. 
+3. Bring up the system. Run the following command from the config directory containing the `docker-compose.yaml` file:
 
-    `kubectl apply -f manifests/` 
+```shell
+docker-compose up
+```
 
-    or if you're using `kapp`:
+4. Verify health:  
+   Check the output of the above step to find a printed `cluster is healthy`  
+     
+5. Run the test command locally:  
+   After the cluster is healthy, you can run the parallel driver 1 to many times via docker exec.  
+   
 
-    `kapp deploy -a app-name -f manifests/ --yes`
+```shell
+docker exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py
+```
 
-4. Check your rollout status
-    ```
-    kubectl rollout status statefulset/etcd --timeout=3m
-    kubectl get sts etcd
-    kubectl get pods
-    ```
+```shell
+docker exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py
+```
 
-    You should see 3/3 pods become ready, named `etcd-0`, `etcd-1`, `etcd-2`.
+Once the cluster is behaving correctly locally, you can proceed to upload it to Antithesis.  (Note that SDK assertions won't be evaluated locally.)
 
-5. Run the test command locally:
-    After the system is up, you can run the parallel driver 1 to many times via `kubectl exec`.
-
-    `kubectl exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
-
-    `kubectl exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
-
-Once the cluster is behaving correctly locally, you can proceed to upload it to Antithesis. (Note that SDK assertions won't be evaluated locally.)
+---
 
 ## Preparing for Antithesis
 
@@ -126,6 +131,9 @@ Once the cluster is behaving correctly locally, you can proceed to upload it to 
 Replace the \<registry\> with your tenant's container repository: `us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository`
 
 ```shell
+docker build -f Dockerfile.health-checker -t <registry>/etcd-health-checker:v1
+docker push <registry>/etcd-health-checker:v1
+
 docker build -f Dockerfile.client -t <registry>/etcd-client:v1
 docker push <registry>/etcd-client:v1
 
@@ -150,3 +158,7 @@ curl --fail -u '$USER:$PASSWORD' \
 ```
 
 Then view the results in the [triage report](https://antithesis.com/docs/reports/#the-triage-report).
+
+<!-- ## Example Report
+
+Using the three node etcd cluster and the `client` image built from this repository, we ran a 1 hour test. The resulting [triage report](https://antithesis.com/docs/reports/triage/) can be found [here](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html), and [our docs](https://antithesis.com/docs/reports/triage/) show you how to interpret it.  -->

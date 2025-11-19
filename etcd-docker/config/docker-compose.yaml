@@ -60,7 +60,7 @@ services:
       retries: 3
 
   health-checker:
-    image: 'etcd-tutorial-health-checker:tutorial'
+    image: 'etcd-health-checker:v1'
     container_name: health-checker
     depends_on:
       etcd0:
@@ -72,11 +72,11 @@ services:
     entrypoint: ['/entrypoint.py']
 
   client1:
-    image: 'etcd-tutorial-client:tutorial'
+    image: 'etcd-client:v1'
     container_name: client1
     entrypoint: "sleep infinity" # The client containers must be kept running for Antithesis to keep testing
 
   client2:
-    image: 'etcd-tutorial-client:tutorial'
+    image: 'etcd-client:v1'
     container_name: client2
     entrypoint: "sleep infinity" # The client containers must be kept running for Antithesis to keep testing
