@@ -38,8 +38,6 @@ Antithesis' [Test Composer](https://antithesis.com/docs/test_templates/) framewo
 
 You provide a set of test commands, executables which the framework detects based on their absolute directory location and names.
 
-In client/Dockerfile.client, you can see the test command get defined in the client container image: `/opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`.
-
 ### First command
 
 `first_make_ring.py` is a [first command](https://antithesis.com/docs/test_templates/test_composer_reference/#first-command) that builds the initial ring graph structure with `n` nodes.
