@@ -10,7 +10,7 @@ pull-dgraph:
 
 build-workload:
 	${docker} build --no-cache \
-		-f ./Dockerfile \
+		-f ./client/Dockerfile \
 		-t dgraph-workload-test:latest \
 	.
 
@@ -27,7 +27,7 @@ view-sdk-logs:
 	${docker} exec workload cat /root/sdk.json
 
 run:
-	docker-compose up -d
+	docker-compose --file ./config/docker-compose.yaml up -d
 
 down:
 	docker-compose down

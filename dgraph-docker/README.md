@@ -112,6 +112,12 @@ make test-finally-check-ring
 
 Once the ring test is behaving correctly locally, you can proceed to upload it to Antithesis.
 
+5. (Optional) Run the following to view the SDK assertions locally.
+
+```shell
+make view-sdk-logs
+```
+
 ---
 
 ## Preparing for Antithesis
