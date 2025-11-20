@@ -35,7 +35,11 @@ Antithesis' [Test Composer](https://antithesis.com/docs/test_templates/) framewo
 
 You provide a set of test commands, executables which the framework detects based on their absolute directory location and names.
 
-In `test-template/Dockerfile`, you can see that four test commands get defined in the `client` container image: `/opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`, `/opt/antithesis/test/v1/main/serial_driver_delete_keys`, `/opt/antithesis/test/v1/main/eventually_health_check.sh`, and `/opt/antithesis/test/v1/main/finally_db_consistent_lines.sh`. 
+In `test-template/Dockerfile`, you can see that four test commands get defined in the `client` container image: 
+- `/opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
+- `/opt/antithesis/test/v1/main/serial_driver_delete_keys`
+- `/opt/antithesis/test/v1/main/eventually_health_check.sh`
+- `/opt/antithesis/test/v1/main/finally_db_consistent_lines.sh`
 
 *Drivers can be defined on any container in the system.* 
 
