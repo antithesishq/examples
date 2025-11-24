@@ -149,4 +149,5 @@ curl --fail -u '$USER:$PASSWORD' \
     } }'
 ```
 
-Then view the results in the [triage report](https://antithesis.com/docs/reports/#the-triage-report).
+### Example triage report
+The resulting [triage report]((https://antithesis.com/docs/reports/#the-triage-report)) can be found [here](https://public.antithesis.com/report/AE7e3JSU6-7SomP2111dgt5w/vSiE2KWkEJ2RxkplF7iaTByDKjWi6_G27vt6TVm4OiQ.html). The report highlights the test properties that failed during the test run.
