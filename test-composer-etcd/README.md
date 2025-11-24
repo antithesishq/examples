@@ -179,4 +179,5 @@ curl --fail -u '$USER:$PASSWORD' \
     } }'
 ```
 
-Then view the results in the [triage report](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html).
+### Example [triage report](https://antithesis.com/docs/reports/#the-triage-report)
+The resulting triage report can be found [here](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html).

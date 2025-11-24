@@ -151,14 +151,11 @@ Submit a test run (replace credentials, tenant name, config image, report recipi
 curl --fail -u '$USER:$PASSWORD' \
 -X POST https://$TENANT_NAME.antithesis.com/api/v1/launch/basic_test \
 -d '{"params": { "antithesis.description":"basic_test on main",
-    "antithesis.duration":"15",
+    "antithesis.duration":"240",
     "antithesis.config_image":"etcd-config:v1", 
     "antithesis.report.recipients":"foo@email.com;bar@email.com"
     } }'
 ```
 
-Then view the results in the [triage report](https://antithesis.com/docs/reports/#the-triage-report).
-
-<!-- ## Example Report
-
-Using the three node etcd cluster and the `client` image built from this repository, we ran a 1 hour test. The resulting [triage report](https://antithesis.com/docs/reports/triage/) can be found [here](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html), and [our docs](https://antithesis.com/docs/reports/triage/) show you how to interpret it.  -->
+### Example [triage report](https://antithesis.com/docs/reports/#the-triage-report)
+The resulting triage report can be found [here](https://public.antithesis.com/report/Zm0x1mKtmL7CI_UKdmpgNIne/G9mqeYWiFWoxwxgxLu-YFQVzxUAUujlwJmj5Hnzr7Jc.html). The report highlights the test properties that failed during the test run.
