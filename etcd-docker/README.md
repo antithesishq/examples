@@ -157,5 +157,5 @@ curl --fail -u '$USER:$PASSWORD' \
     } }'
 ```
 
-### Example [triage report](https://antithesis.com/docs/reports/#the-triage-report)
-The resulting triage report can be found [here](https://public.antithesis.com/report/Zm0x1mKtmL7CI_UKdmpgNIne/G9mqeYWiFWoxwxgxLu-YFQVzxUAUujlwJmj5Hnzr7Jc.html). The report highlights the test properties that failed during the test run.
+### Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/Zm0x1mKtmL7CI_UKdmpgNIne/G9mqeYWiFWoxwxgxLu-YFQVzxUAUujlwJmj5Hnzr7Jc.html). The report highlights the test properties that failed during the test run.

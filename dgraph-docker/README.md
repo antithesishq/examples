@@ -154,5 +154,5 @@ curl --fail -u '$USER:$PASSWORD' \
     } }'
 ```
 
-### Example [triage report](https://antithesis.com/docs/reports/#the-triage-report)
-The resulting triage report can be found [here](https://public.antithesis.com/report/pIEU5Hg1buB8V9cCIMhMlvV4/KJlPOcIi0ntEQsp9gOYlZZxg9hOIX3mcck206tMXyTY.html). The report lists all test properties and their status as either passing or failing. In this report, you'll find the `always assertion - Ring held before commit` failing which was a bug found in Dgraph. 
+### Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/pIEU5Hg1buB8V9cCIMhMlvV4/KJlPOcIi0ntEQsp9gOYlZZxg9hOIX3mcck206tMXyTY.html). The report lists all test properties and their status as either passing or failing. In this report, you'll find the `always assertion - Ring held before commit` failing which was a bug found in Dgraph. 
