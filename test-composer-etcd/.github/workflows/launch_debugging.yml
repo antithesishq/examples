@@ -1,0 +1,43 @@
+name: Launch multiverse debugger
+
+on: 
+  #manual run
+  workflow_dispatch:
+    inputs:
+      session_id:
+        type: string
+        required: true
+        description: Antithesis test session
+      input_hash:
+        type: string
+        required: true
+        description: Input hash for the moment
+      vtime:
+        type: string
+        required: true
+        description: Vtime for the moment
+      emails:
+        type: string
+        required: true
+        description: Email receipents
+
+jobs:
+  manual_run:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: antithesishq/antithesis-trigger-action@main
+        with:
+          notebook_name: debugging
+          tenant: demo
+          username: ${{ secrets.ANTITHESIS_USERNAME }}
+          password: ${{ secrets.ANTITHESIS_PASSWORD }}
+          github_token: ${{ secrets.GH_PAT }}
+          description: "Debugging session from Github actions"
+          email_recipients: demo-notifications.231bba29dc150b687d3f3d9370e63ada.show-sender@streams.zulipchat.com;${{ github.event.inputs.emails }}
+          additional_parameters: |-
+            antithesis.debugging.session_id=${{ github.event.inputs.session_id }}
+            antithesis.debugging.input_hash=${{ github.event.inputs.input_hash }}
+            antithesis.debugging.vtime=${{ github.event.inputs.vtime }}

@@ -1,6 +1,9 @@
+version: '3.8'
+
 services:
+
   etcd0:
-    image: 'docker.io/bitnamilegacy/etcd:3.5'
+    image: 'docker.io/bitnami/etcd:3.5'
     container_name: etcd0
     hostname: etcd0
     environment: 
@@ -13,14 +16,9 @@ services:
       ETCD_INITIAL_CLUSTER: "etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380"
       ETCD_INITIAL_CLUSTER_STATE: "new"
       ALLOW_NONE_AUTHENTICATION: "yes"
-    healthcheck:
-      test: ["CMD", "etcdctl", "endpoint", "health"]
-      interval: 5s
-      timeout: 5s
-      retries: 3
 
   etcd1:
-    image: 'docker.io/bitnamilegacy/etcd:3.5'
+    image: 'docker.io/bitnami/etcd:3.5'
     container_name: etcd1
     hostname: etcd1
     environment: 
@@ -33,14 +31,9 @@ services:
       ETCD_INITIAL_CLUSTER: "etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380"
       ETCD_INITIAL_CLUSTER_STATE: "new"
       ALLOW_NONE_AUTHENTICATION: "yes"
-    healthcheck:
-      test: ["CMD", "etcdctl", "endpoint", "health"]
-      interval: 5s
-      timeout: 5s
-      retries: 3
 
   etcd2:
-    image: 'docker.io/bitnamilegacy/etcd:3.5'
+    image: 'docker.io/bitnami/etcd:3.5'
     container_name: etcd2
     hostname: etcd2
     environment: 
@@ -53,30 +46,8 @@ services:
       ETCD_INITIAL_CLUSTER: "etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380"
       ETCD_INITIAL_CLUSTER_STATE: "new"
       ALLOW_NONE_AUTHENTICATION: "yes"
-    healthcheck:
-      test: ["CMD", "etcdctl", "endpoint", "health"]
-      interval: 5s
-      timeout: 5s
-      retries: 3
 
-  health-checker:
-    image: 'etcd-tutorial-health-checker:tutorial'
-    container_name: health-checker
-    depends_on:
-      etcd0:
-        condition: service_healthy
-      etcd1:
-        condition: service_healthy
-      etcd2:
-        condition: service_healthy
+  client:
+    image: 'etcd-client:latest'
+    container_name: client
     entrypoint: ['/entrypoint.py']
-
-  client1:
-    image: 'etcd-tutorial-client:tutorial'
-    container_name: client1
-    entrypoint: "sleep infinity" # The client containers must be kept running for Antithesis to keep testing
-
-  client2:
-    image: 'etcd-tutorial-client:tutorial'
-    container_name: client2
-    entrypoint: "sleep infinity" # The client containers must be kept running for Antithesis to keep testing
