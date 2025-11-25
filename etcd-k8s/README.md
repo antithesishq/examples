@@ -8,6 +8,9 @@ This example demonstrates how to bring a system under test with Antithesis. It i
 
 Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_kubernetes/).
 
+## Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/AE7e3JSU6-7SomP2111dgt5w/vSiE2KWkEJ2RxkplF7iaTByDKjWi6_G27vt6TVm4OiQ.html). The report highlights the test properties that failed during the test run.
+
 ## Architecture Overview
 
 The system under test includes:
@@ -31,7 +34,7 @@ You will need:
 
 ## Testing Locally
 
-Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
+It's convenient to check your work locally before starting a full Antithesis test.
 
 This process is [described in greater detail here](https://antithesis.com/docs/tutorials/k8s-cluster-setup/#start-the-cluster-locally) and [here](https://antithesis.com/docs/test_templates/testing_locally/)
 
@@ -75,7 +78,11 @@ Once the cluster is behaving correctly locally, you can proceed to upload it to 
 
 ### Build and push container images
 
-Replace the \<registry\> with your tenant's container repository: `us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository`
+Replace the \<registry\> with your Antithesis tenant repository: 
+
+```
+us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
+```
 
 ```shell
 docker build -f Dockerfile.client -t <registry>/etcd-client:v1
@@ -101,8 +108,6 @@ curl --fail -u '$USER:$PASSWORD' \
     } }'
 ```
 
-### Example triage report
-The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/AE7e3JSU6-7SomP2111dgt5w/vSiE2KWkEJ2RxkplF7iaTByDKjWi6_G27vt6TVm4OiQ.html). The report highlights the test properties that failed during the test run.
 <!-- 
 ---
 

@@ -6,6 +6,9 @@ This example demonstrates how to use the [Test Composer](https://antithesis.com/
 - A client workload.
 - Example assertions.
 
+## Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html).
+
 ---
 
 ## Architecture Overview
@@ -107,7 +110,7 @@ Randomness is key for autonomous testing, since we want the software to follow m
 
 ## Testing Locally (Optional)
 
-Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
+It's convenient to check your work locally before starting a full Antithesis test.
 
 This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
 
@@ -153,7 +156,11 @@ Once the cluster is behaving correctly locally, you can proceed to upload it to 
 
 ### Build and push container images
 
-Replace the \<registry\> with your tenant's container repository: `us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository`
+Replace the \<registry\> with your Antithesis tenant repository: 
+
+```
+us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
+```
 
 ```shell
 docker build -f Dockerfile.client -t <registry>/etcd-client:v1
@@ -178,6 +185,3 @@ curl --fail -u '$USER:$PASSWORD' \
     "antithesis.report.recipients":"foo@email.com;bar@email.com"
     } }'
 ```
-
-### Example triage report
-The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html).

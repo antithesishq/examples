@@ -6,7 +6,10 @@ This example demonstrates how to test ACID compliance with a workload we call th
 - A client workload.  
 - Example assertions.
 
-Follow the step-by-step tutorial [here]().
+Follow the step-by-step tutorial [here](https://antithesis.com/resources/ring_test/).
+
+## Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/pIEU5Hg1buB8V9cCIMhMlvV4/KJlPOcIi0ntEQsp9gOYlZZxg9hOIX3mcck206tMXyTY.html). The report lists all test properties and their status as either passing or failing. In this report, you'll find the `always assertion - Ring held before commit` failing which was a bug found in Dgraph. 
 
 ---
 
@@ -34,13 +37,13 @@ You will need:
 
 ## Testing Locally (Optional)
 
-Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
+It's convenient to check your work locally before starting a full Antithesis test.
 
 This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
 
 The repo provides various make commands you can use to get this setup running locally.
 
-1. Pull the docker container image, build the workload and bring the cluster up:
+1. Pull the docker container image, build the workload and bring up the cluster:
 
 ```shell
 make up
@@ -58,13 +61,11 @@ make test-first-make-ring
 make test-make-swaps
 ```
 
-4. Check that the ring structure is intact:
+4. Check that the ring structure is maintained:
 
 ```shell
 make test-finally-check-ring
 ```
-
-Once the ring test is behaving correctly locally, you can proceed to upload it to Antithesis.
 
 5. (Optional) Run the following to view the SDK assertions locally.
 
@@ -72,13 +73,15 @@ Once the ring test is behaving correctly locally, you can proceed to upload it t
 make view-sdk-logs
 ```
 
+Once the ring test is behaving correctly locally, you can proceed to upload it to Antithesis.
+
 ---
 
 ## Preparing for Antithesis
 
 ### Build and push container images
 
-Replace the \<registry\> with Antithesis’s container registry: 
+Replace the \<registry\> with your Antithesis tenant repository: 
 
 ```
 us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
@@ -108,8 +111,6 @@ curl --fail -u '$USER:$PASSWORD' \
     } }'
 ```
 
-### Example triage report
-The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/pIEU5Hg1buB8V9cCIMhMlvV4/KJlPOcIi0ntEQsp9gOYlZZxg9hOIX3mcck206tMXyTY.html). The report lists all test properties and their status as either passing or failing. In this report, you'll find the `always assertion - Ring held before commit` failing which was a bug found in Dgraph. 
 <!-- 
 ---
 
