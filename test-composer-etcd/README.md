@@ -1,10 +1,13 @@
 # Etcd
 
-This example demonstrates how to use the [Test Composer](https://antithesis.com/docs/test_templates/) to write test workloads using a 3-node **etcd** cluster. It includes:
+This example demonstrates how to use the [Test Composer](https://antithesis.com/docs/test_templates/) framework to write test workloads using a 3-node **etcd** cluster. It includes:
 
-- A reproducible cluster setup using Docker Compose.  
-- A client workload.  
+- A reproducible cluster setup using Docker Compose.
+- A client workload.
 - Example assertions.
+
+## Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html).
 
 ---
 
@@ -12,7 +15,7 @@ This example demonstrates how to use the [Test Composer](https://antithesis.com/
 
 The system under test includes:
 
-- **3 etcd server nodes** (`etcd0`, `etcd1`, `etcd2`).  
+- **3 etcd server nodes** (`etcd0`, `etcd1`, `etcd2`).
 - **1 client container** that performs a health-check and read/write operations.
 
 [Faults](https://antithesis.com/docs/environment/fault_injection/) such as network partitions, restarts, pauses, and more will be introduced automatically by Antithesis.
@@ -23,8 +26,8 @@ The system under test includes:
 
 You will need:
 
-- Docker and Docker Compose.  
-- An Antithesis account and authentication credentials.  
+- Docker and Docker Compose.
+- An Antithesis account and authentication credentials.
 - Access to Antithesis’s container registry.
 
 ---
@@ -107,7 +110,7 @@ Randomness is key for autonomous testing, since we want the software to follow m
 
 ## Testing Locally (Optional)
 
-Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
+It's convenient to check your work locally before starting a full Antithesis test.
 
 This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
 
@@ -153,7 +156,11 @@ Once the cluster is behaving correctly locally, you can proceed to upload it to 
 
 ### Build and push container images
 
-Replace the \<registry\> with your tenant's container repository: `us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository`
+Replace the \<registry\> with your Antithesis tenant repository: 
+
+```
+us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
+```
 
 ```shell
 docker build -f Dockerfile.client -t <registry>/etcd-client:v1
@@ -178,6 +185,3 @@ curl --fail -u '$USER:$PASSWORD' \
     "antithesis.report.recipients":"foo@email.com;bar@email.com"
     } }'
 ```
-
-### Example triage report
-The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/f6oh7KZ6Pchcv9nGfo5oL9IU/lCbpXJUfNwfknLazqvV3mWD3CM37l89raJTdSXNBh3c.html).

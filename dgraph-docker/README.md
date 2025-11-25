@@ -1,12 +1,15 @@
 # Dgraph
 
-This example demonstrates how to test dgraph, an ACID-compliant graph database using Antithesis. It includes:
+This example demonstrates how to test ACID compliance with a workload we call the Ring test. We test Dgraph using this workload. It includes:
 
-- A reproducible cluster setup using Docker Compose.  
+- A reproducible cluster setup using Docker Compose.
 - A client workload.  
 - Example assertions.
 
-Follow the step-by-step tutorial here.
+Follow the step-by-step tutorial [here](https://antithesis.com/resources/ring_test/).
+
+## Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/pIEU5Hg1buB8V9cCIMhMlvV4/KJlPOcIi0ntEQsp9gOYlZZxg9hOIX3mcck206tMXyTY.html). The report lists all test properties and their status as either passing or failing. In this report, you'll find the `always assertion - Ring held before commit` failing which was a bug found in Dgraph. 
 
 ---
 
@@ -14,8 +17,8 @@ Follow the step-by-step tutorial here.
 
 The system under test includes:
 
-- 3 dgraph alpha server nodes  
-- 3 dgraph zero server nodes  
+- 3 dgraph alpha server nodes
+- 3 dgraph zero server nodes 
 - 1 ring test workload container
 
 [Faults](https://antithesis.com/docs/environment/fault_injection/) such as network partitions, restarts, pauses, and more will be introduced automatically by Antithesis.
@@ -30,6 +33,85 @@ You will need:
 - An Antithesis account and authentication credentials.  
 - Access to Antithesis’s container registry.
 
+---
+
+## Testing Locally (Optional)
+
+It's convenient to check your work locally before starting a full Antithesis test.
+
+This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
+
+The repo provides various make commands you can use to get this setup running locally.
+
+1. Pull the docker container image, build the workload and bring up the cluster:
+
+```shell
+make up
+```
+
+2. Build the initial ring:
+
+```shell
+make test-first-make-ring
+```
+
+3. Run multiple ring swaps in parallel indefinitely, you can run this for a few seconds and exit out of the terminal:
+
+```shell
+make test-make-swaps
+```
+
+4. Check that the ring structure is maintained:
+
+```shell
+make test-finally-check-ring
+```
+
+5. (Optional) Run the following to view the SDK assertions locally.
+
+```shell
+make view-sdk-logs
+```
+
+Once the ring test is behaving correctly locally, you can proceed to upload it to Antithesis.
+
+---
+
+## Preparing for Antithesis
+
+### Build and push container images
+
+Replace the \<registry\> with your Antithesis tenant repository: 
+
+```
+us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
+```
+
+```shell
+docker build -f Dockerfile -t <registry>/dgraph-client:v1
+docker push <registry>/dgraph-client:v1
+
+docker build -f Dockerfile.config -t <registry>/dgraph-config:v1
+docker push <registry>/dgraph-config:v1
+```
+
+---
+
+## Running the Example on Antithesis
+
+Submit a test run (replace credentials, tenant name, config image, report recipients):
+
+```shell
+curl --fail -u '$USER:$PASSWORD' \
+-X POST https://$TENANT_NAME.antithesis.com/api/v1/launch/basic_test \
+-d '{"params": { "antithesis.description":"basic_test on main",
+    "antithesis.duration":"180",
+    "antithesis.config_image":"dgraph-config:v1", 
+    "antithesis.report.recipients":"foo@email.com;bar@email.com"
+    } }'
+```
+
+<!-- 
 ---
 
 ## Test template
@@ -76,83 +158,4 @@ always(continuity, "Ring continuity maintained", {"cause":msg})
 
 ### Randomness
 
-Randomness is key for autonomous testing, since we want the software to follow many unpredictable execution paths. [The Antithesis SDK](https://antithesis.com/docs/using_antithesis/sdk/#randomness) provides an easy interface to get structured random values while also providing valuable guidance to the Antithesis platform, which increases the efficiency of testing.
-
-## Testing Locally (Optional)
-
-Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
-
-This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
-
-The repo provides various make commands you can use to get this setup running locally.
-
-1. Pull the docker container image, build the workload and bring the cluster up:
-
-```shell
-make up
-```
-
-2. Build the initial ring:
-
-```shell
-make test-first-make-ring
-```
-
-3. Run multiple ring swaps in parallel indefinitely, you can run this for a few seconds and exit out of the terminal:
-
-```shell
-make test-make-swaps
-```
-
-4. Check that the ring structure is intact:
-
-```shell
-make test-finally-check-ring
-```
-
-Once the ring test is behaving correctly locally, you can proceed to upload it to Antithesis.
-
-5. (Optional) Run the following to view the SDK assertions locally.
-
-```shell
-make view-sdk-logs
-```
-
----
-
-## Preparing for Antithesis
-
-### Build and push container images
-
-Replace the \<registry\> with Antithesis’s container registry: 
-
-```
-us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
-```
-
-```shell
-docker build -f Dockerfile -t <registry>/dgraph-client:v1
-docker push <registry>/dgraph-client:v1
-
-docker build -f Dockerfile.config -t <registry>/dgraph-config:v1
-docker push <registry>/dgraph-config:v1
-```
-
----
-
-## Running the Example on Antithesis
-
-Submit a test run (replace credentials, tenant name, config image, report recipients):
-
-```shell
-curl --fail -u '$USER:$PASSWORD' \
--X POST https://$TENANT_NAME.antithesis.com/api/v1/launch/basic_test \
--d '{"params": { "antithesis.description":"basic_test on main",
-    "antithesis.duration":"180",
-    "antithesis.config_image":"dgraph-config:v1", 
-    "antithesis.report.recipients":"foo@email.com;bar@email.com"
-    } }'
-```
-
-### Example triage report
-The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/pIEU5Hg1buB8V9cCIMhMlvV4/KJlPOcIi0ntEQsp9gOYlZZxg9hOIX3mcck206tMXyTY.html). The report lists all test properties and their status as either passing or failing. In this report, you'll find the `always assertion - Ring held before commit` failing which was a bug found in Dgraph. 
+Randomness is key for autonomous testing, since we want the software to follow many unpredictable execution paths. [The Antithesis SDK](https://antithesis.com/docs/using_antithesis/sdk/#randomness) provides an easy interface to get structured random values while also providing valuable guidance to the Antithesis platform, which increases the efficiency of testing. -->

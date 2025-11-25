@@ -1,18 +1,21 @@
 # Etcd
 
-This example demonstrates how to test a 3-node **etcd** cluster using Antithesis. It includes:
+This example demonstrates how to bring a system under test with Antithesis. It includes:
 
-- A reproducible cluster setup using Kubernetes.  
-- A basic client workload.  
+- A reproducible 3-node etcd cluster setup using Docker Compose.
+- A basic client workload.
 - Example assertions.
 
 Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_kubernetes/).
+
+## Example triage report
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/AE7e3JSU6-7SomP2111dgt5w/vSiE2KWkEJ2RxkplF7iaTByDKjWi6_G27vt6TVm4OiQ.html). The report highlights the test properties that failed during the test run.
 
 ## Architecture Overview
 
 The system under test includes:
 
-- **3 etcd server nodes** (`etcd0`, `etcd1`, `etcd2`).  
+- **3 etcd server nodes** (`etcd0`, `etcd1`, `etcd2`).
 - **2 client containers** that perform read/write operations.
 
 [Faults](https://antithesis.com/docs/environment/fault_injection/) such as network partitions, restarts, pauses, and more will be introduced automatically by Antithesis.
@@ -27,6 +30,85 @@ You will need:
 - An Antithesis account and authentication credentials.  
 - Access to Antithesis’s container registry.
 
+---
+
+## Testing Locally
+
+It's convenient to check your work locally before starting a full Antithesis test.
+
+This process is [described in greater detail here](https://antithesis.com/docs/tutorials/k8s-cluster-setup/#start-the-cluster-locally) and [here](https://antithesis.com/docs/test_templates/testing_locally/)
+
+1. Pull the etcd image:
+
+```shell
+docker pull bitnamilegacy/etcd:3.5
+```
+
+2. Build the client image: 
+
+    `docker build -f client/Dockerfile.client -t etcd-client:k8s client/`
+
+3. Deploy your manifests. 
+
+    `kubectl apply -f manifests/` 
+
+    or if you're using `kapp`:
+
+    `kapp deploy -a app-name -f manifests/ --yes`
+
+4. Check your rollout status
+    ```
+    kubectl rollout status statefulset/etcd --timeout=3m
+    kubectl get sts etcd
+    kubectl get pods
+    ```
+
+    You should see 3/3 pods become ready, named `etcd-0`, `etcd-1`, `etcd-2`.
+
+5. Run the test command locally:
+    After the system is up, you can run the parallel driver 1 to many times via `kubectl exec`.
+
+    `kubectl exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
+
+    `kubectl exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
+
+Once the cluster is behaving correctly locally, you can proceed to upload it to Antithesis. (Note that SDK assertions won't be evaluated locally.)
+
+## Preparing for Antithesis
+
+### Build and push container images
+
+Replace the \<registry\> with your Antithesis tenant repository: 
+
+```
+us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
+```
+
+```shell
+docker build -f Dockerfile.client -t <registry>/etcd-client:v1
+docker push <registry>/etcd-client:v1
+
+docker build -f Dockerfile.config -t <registry>/etcd-config:v1
+docker push <registry>/etcd-config:v1
+```
+
+---
+
+## Running the Example on Antithesis
+
+Submit a test run (replace credentials, tenant name, config image, report recipients):
+
+```shell
+curl --fail -u '$USER:$PASSWORD' \
+-X POST https://$TENANT_NAME.antithesis.com/api/v1/launch/basic_test \
+-d '{"params": { "antithesis.description":"basic_test on main",
+    "antithesis.duration":"15",
+    "antithesis.config_image":"etcd-config:v1", 
+    "antithesis.report.recipients":"foo@email.com;bar@email.com"
+    } }'
+```
+
+<!-- 
 ---
 
 ## Test template
@@ -75,79 +157,4 @@ always(values_stay_consistent, "Database key values stay consistent", {"mismatch
 
 ### Randomness
 
-Randomness is key for autonomous testing, since we want the software to follow many unpredictable execution paths. [The Antithesis SDK](https://antithesis.com/docs/using_antithesis/sdk/#randomness) provides an easy interface to get structured random values while also providing valuable guidance to the Antithesis platform, which increases the efficiency of testing.
-
-## Testing Locally
-
-Before running your application on the Antithesis platform, checking your work locally before you kick off a full Antithesis test run can be convenient.
-
-This process is [described in greater detail here](https://antithesis.com/docs/tutorials/k8s-cluster-setup/#start-the-cluster-locally) and [here](https://antithesis.com/docs/test_templates/testing_locally/)
-
-1. Pull the etcd image:
-
-```shell
-docker pull bitnamilegacy/etcd:3.5
-```
-
-2. Build the client image: 
-
-    `docker build -f client/Dockerfile.client -t etcd-client:k8s client/`
-
-3. Deploy your manifests. 
-
-    `kubectl apply -f manifests/` 
-
-    or if you're using `kapp`:
-
-    `kapp deploy -a app-name -f manifests/ --yes`
-
-4. Check your rollout status
-    ```
-    kubectl rollout status statefulset/etcd --timeout=3m
-    kubectl get sts etcd
-    kubectl get pods
-    ```
-
-    You should see 3/3 pods become ready, named `etcd-0`, `etcd-1`, `etcd-2`.
-
-5. Run the test command locally:
-    After the system is up, you can run the parallel driver 1 to many times via `kubectl exec`.
-
-    `kubectl exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
-
-    `kubectl exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py`
-
-Once the cluster is behaving correctly locally, you can proceed to upload it to Antithesis. (Note that SDK assertions won't be evaluated locally.)
-
-## Preparing for Antithesis
-
-### Build and push container images
-
-Replace the \<registry\> with your tenant's container repository: `us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository`
-
-```shell
-docker build -f Dockerfile.client -t <registry>/etcd-client:v1
-docker push <registry>/etcd-client:v1
-
-docker build -f Dockerfile.config -t <registry>/etcd-config:v1
-docker push <registry>/etcd-config:v1
-```
-
----
-
-## Running the Example on Antithesis
-
-Submit a test run (replace credentials, tenant name, config image, report recipients):
-
-```shell
-curl --fail -u '$USER:$PASSWORD' \
--X POST https://$TENANT_NAME.antithesis.com/api/v1/launch/basic_test \
--d '{"params": { "antithesis.description":"basic_test on main",
-    "antithesis.duration":"15",
-    "antithesis.config_image":"etcd-config:v1", 
-    "antithesis.report.recipients":"foo@email.com;bar@email.com"
-    } }'
-```
-
-### Example triage report
-The resulting [triage report]((https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/AE7e3JSU6-7SomP2111dgt5w/vSiE2KWkEJ2RxkplF7iaTByDKjWi6_G27vt6TVm4OiQ.html). The report highlights the test properties that failed during the test run.
+Randomness is key for autonomous testing, since we want the software to follow many unpredictable execution paths. [The Antithesis SDK](https://antithesis.com/docs/using_antithesis/sdk/#randomness) provides an easy interface to get structured random values while also providing valuable guidance to the Antithesis platform, which increases the efficiency of testing. -->
