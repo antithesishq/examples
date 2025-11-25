@@ -1,9 +1,9 @@
 # Etcd
 
-This example demonstrates how to use the [Test Composer](https://antithesis.com/docs/test_templates/) to write test workloads using a 3-node **etcd** cluster. It includes:
+This example demonstrates how to use the [Test Composer](https://antithesis.com/docs/test_templates/) framework to write test workloads using a 3-node **etcd** cluster. It includes:
 
-- A reproducible cluster setup using Docker Compose.  
-- A client workload.  
+- A reproducible cluster setup using Docker Compose.
+- A client workload.
 - Example assertions.
 
 ---
@@ -12,7 +12,7 @@ This example demonstrates how to use the [Test Composer](https://antithesis.com/
 
 The system under test includes:
 
-- **3 etcd server nodes** (`etcd0`, `etcd1`, `etcd2`).  
+- **3 etcd server nodes** (`etcd0`, `etcd1`, `etcd2`).
 - **1 client container** that performs a health-check and read/write operations.
 
 [Faults](https://antithesis.com/docs/environment/fault_injection/) such as network partitions, restarts, pauses, and more will be introduced automatically by Antithesis.
@@ -23,8 +23,8 @@ The system under test includes:
 
 You will need:
 
-- Docker and Docker Compose.  
-- An Antithesis account and authentication credentials.  
+- Docker and Docker Compose.
+- An Antithesis account and authentication credentials.
 - Access to Antithesis’s container registry.
 
 ---
