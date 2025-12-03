@@ -9,7 +9,7 @@ This example demonstrates how to bring a system under test with Antithesis. It i
 Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_docker/).
 
 ## Example triage report
-The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/Zm0x1mKtmL7CI_UKdmpgNIne/G9mqeYWiFWoxwxgxLu-YFQVzxUAUujlwJmj5Hnzr7Jc.html). The report highlights the test properties that failed during the test run.
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/whdeEU-c5r8ikFzEZucXo4vE/Ht8smSZQtltn5uMFfbhf14NutS5SNBoM12WTYPQFwBI.html). The report highlights the test properties that failed during the test run.
 
 ---
 
