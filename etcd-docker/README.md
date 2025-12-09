@@ -1,4 +1,4 @@
-# Etcd
+# Etcd with Docker Compose
 
 This example demonstrates how to bring a system under test with Antithesis. It includes:
 
@@ -8,12 +8,11 @@ This example demonstrates how to bring a system under test with Antithesis. It i
 
 Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_docker/).
 
-## Example triage report
+### Example triage report
+
 The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/Zm0x1mKtmL7CI_UKdmpgNIne/G9mqeYWiFWoxwxgxLu-YFQVzxUAUujlwJmj5Hnzr7Jc.html). The report highlights the test properties that failed during the test run.
 
----
-
-## Architecture Overview
+### Architecture overview
 
 The system under test includes:
 
@@ -23,67 +22,25 @@ The system under test includes:
 
 [Faults](https://antithesis.com/docs/environment/fault_injection/) such as network partitions, restarts, pauses, and more will be introduced automatically by Antithesis.
 
----
-
 ## Prerequisites
 
 You will need:
 
 - Docker and Docker Compose.
 - An Antithesis account and authentication credentials.
-- Access to Antithesis’s container registry.
+- Access to Antithesis's container registry.
 
----
+## How to run the example
 
-## Testing Locally (Optional)
+This section explains how to build the example and run it in Antithesis. Optionally, you may want to [test locally](#testing-locally-optional) first.
 
-It's convenient to check your work locally before starting a full Antithesis test.
+### Build and run in Antithesis
 
-This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
+To run the example, first build and push your container images and then submit a test run to Antithesis.
 
-1. Pull the etcd image:
+#### Build and push container images
 
-```shell
-docker pull bitnamilegacy/etcd:3.5
-```
-
-2. Build container images (health-checker, client):
-
-```shell
-docker build . -f Dockerfile.health-checker -t etcd-health-checker:v1
-docker build . -f Dockerfile.client -t etcd-client:v1
-```
-
-3. Bring up the system. Run the following command from the config directory containing the `docker-compose.yaml` file:
-
-```shell
-docker-compose up
-```
-
-4. Verify health:  
-   Check the output of the above step to find a printed `cluster is healthy`  
-     
-5. Run the test command locally:  
-   After the cluster is healthy, you can run the parallel driver 1 to many times via docker exec.  
-   
-
-```shell
-docker exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py
-```
-
-```shell
-docker exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py
-```
-
-Once the cluster is behaving correctly locally, you can proceed to upload it to Antithesis.  (Note that SDK assertions won't be evaluated locally.)
-
----
-
-## Preparing for Antithesis
-
-### Build and push container images
-
-Replace the \<registry\> with your Antithesis tenant repository: 
+Replace the \<registry\> placeholder with your Antithesis tenant repository: 
 
 ```
 us-central1-docker.pkg.dev/molten-verve-216720/$TENANT_NAME-repository
@@ -100,9 +57,7 @@ docker build -f Dockerfile.config -t <registry>/etcd-config:v1
 docker push <registry>/etcd-config:v1
 ```
 
----
-
-## Running the Example on Antithesis
+#### Run the example on Antithesis
 
 Submit a test run (replace credentials, tenant name, config image, report recipients):
 
@@ -115,3 +70,44 @@ curl --fail -u '$USER:$PASSWORD' \
     "antithesis.report.recipients":"foo@email.com;bar@email.com"
     } }'
 ```
+
+### Testing locally (optional)
+
+It's convenient to check your work locally before starting a full Antithesis test.
+
+This process is described in greater detail [here](https://antithesis.com/docs/test_templates/testing_locally/).
+
+1. Pull the etcd image:
+
+    ```shell
+    docker pull bitnamilegacy/etcd:3.5
+    ```
+
+2. Build container images (health-checker, client):
+
+    ```shell
+    docker build . -f Dockerfile.health-checker -t etcd-health-checker:v1
+    docker build . -f Dockerfile.client -t etcd-client:v1
+    ```
+
+3. Bring up the system. Run the following command from the config directory containing the `docker-compose.yaml` file:
+
+    ```shell
+    docker-compose up
+    ```
+
+4. Verify health:  
+   Check the output of the above step to find a printed `cluster is healthy`  
+     
+5. Run the test command locally:  
+   After the cluster is healthy, you can run the parallel driver 1 to many times via docker exec.  
+
+    ```shell
+    docker exec client1 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py
+    ```
+
+    ```shell
+    docker exec client2 /opt/antithesis/test/v1/main/parallel_driver_generate_traffic.py
+    ```
+
+Once the cluster is behaving correctly locally, you can proceed to upload it to Antithesis. (Note that SDK assertions won't be evaluated locally.)
