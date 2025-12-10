@@ -9,7 +9,7 @@ This example demonstrates how to bring a system under test with Antithesis. It i
 Follow the step-by-step tutorial [here](https://antithesis.com/docs/tutorials/etcd_kubernetes/).
 
 ## Example triage report
-The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/AE7e3JSU6-7SomP2111dgt5w/vSiE2KWkEJ2RxkplF7iaTByDKjWi6_G27vt6TVm4OiQ.html). The report highlights the test properties that failed during the test run.
+The resulting [triage report](https://antithesis.com/docs/reports/#the-triage-report) can be found [here](https://public.antithesis.com/report/F196l8feJ70SBfDIfB0Ih3I3/-aEZKGBnQP9SmqrER3PFHhtuRxkd3fwK0meEUz6Qma8.html). The report highlights the test properties that failed during the test run.
 
 ## Architecture Overview
 
