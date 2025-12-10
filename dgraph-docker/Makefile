@@ -12,7 +12,7 @@ build-workload:
 	${docker} build --no-cache \
 		-f ./client/Dockerfile \
 		-t dgraph-workload-test:latest \
-	.
+	./client
 
 test-first-make-ring:
 	${docker} exec workload /opt/antithesis/test/v1/ring_test/first_make_ring.py
